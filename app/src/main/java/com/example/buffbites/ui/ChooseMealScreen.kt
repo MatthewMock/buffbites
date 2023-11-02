@@ -33,16 +33,18 @@ import java.text.NumberFormat
 
 @Composable
 fun ChooseMenuScreen(
-    options: List<MenuItem>,
+    options: List<MenuItem>?,
     onSelectionChanged: (MenuItem) -> Unit,
     modifier: Modifier = Modifier,
+    onNextButtonClicked: () -> Unit = {},
+    onCancelButtonClicked: () -> Unit = {}
 ) {
     var selectedItemName by rememberSaveable { mutableStateOf("") }
 
     Column(
         modifier = modifier
     ) {
-        options.forEach { item ->
+        options?.forEach { item ->
             val onClick = {
                 selectedItemName = item.name
                 onSelectionChanged(item)
@@ -60,8 +62,8 @@ fun ChooseMenuScreen(
         Spacer(modifier = Modifier.weight(1f))
         MenuScreenButtonGroup(
             selectedItemName = selectedItemName,
-            onCancelButtonClicked = { /* TODO */ },
-            onNextButtonClicked = { /* TODO */ },
+            onCancelButtonClicked = { onCancelButtonClicked },
+            onNextButtonClicked = { onNextButtonClicked },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
@@ -142,7 +144,9 @@ fun MenuScreenPreview() {
             onSelectionChanged = {},
             modifier = Modifier
                 .padding(16.dp)
-                .verticalScroll(rememberScrollState())
+                .verticalScroll(rememberScrollState()),
+            onNextButtonClicked = {},
+            onCancelButtonClicked = {}
         )
     }
 }
